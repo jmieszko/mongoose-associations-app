@@ -7,8 +7,9 @@ const Tweet = require("../models/user").Tweet; //Use . notation to refer to spec
 //INDEX
 router.get("/", (req, res) => {
 	User.find({}, (error, allUsers) => {
+		console.log(allUsers);
 		res.render("users/index.ejs", {
-			user: allUsers,
+			users: allUsers,
 		});
 	});
 });
@@ -98,5 +99,18 @@ router.delete("/:userId/tweets/:tweetId", (req, res) => {
 		});
 	});
 });
+
+router.delete("/:userId/", (req, res) => {
+	console.log("DELETE USER");
+	// set the value of the user id
+	const userId = req.params.userId;
+	// find user in db by id
+	User.findById(userId, (err, foundUser) => {
+		// find tweet embedded in user
+		foundUser.remove(); //Specific for embedded documents when using Mongoose and Mongo
+		res.redirect(`/users/`);
+		});
+	});
+
 
 module.exports = router; //Exports so that it can be used in other parts of the site
