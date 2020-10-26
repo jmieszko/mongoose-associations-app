@@ -23,7 +23,7 @@ app.use(methodOverride('_method')); //
 
 // ABOVE our app.get()
 app.use('/users', require('./controllers/usersController')); //Puts /users before every route in the controller file
-
+app.use('/albums', require('./controllers/albumsController')); //Puts /albums before every route in the controller file
 
 // app.get('/', (req, res) => {
 //   res.render('home.ejs'); //Basically the home page
