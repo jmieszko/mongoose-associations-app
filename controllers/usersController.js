@@ -4,6 +4,15 @@ const Tweet = require("../models/user").Tweet; //Use . notation to refer to spec
 
 // const {User, Tweet } = require('..models/user'); //Another way of re-writing the declaratinos for User and Tweet
 
+//INDEX
+router.get("/", (req, res) => {
+	User.find({}, (error, allUsers) => {
+		res.render("users/index.ejs", {
+			user: allUsers,
+		});
+	});
+});
+
 // NEW USER FORM
 router.get("/new", (req, res) => {
 	res.render("users/new.ejs");
@@ -33,59 +42,61 @@ router.post("/:userId/tweets", (req, res) => {
 	// find user in db by id and add new tweet
 	User.findById(req.params.userId, (error, user) => {
 		user.tweets.push(newTweet); //Push the most recent tweet onto the array
-		user.save((err, user) => { //Saves the user array
+		user.save((err, user) => {
+			//Saves the user array
 			res.redirect(`/users/${user.id}`);
 		});
 	});
 });
 
-router.get('/:userId/tweets/:tweetId/edit', (req, res) => {
-    // set the value of the user and tweet ids
-    const userId = req.params.userId;
-    const tweetId = req.params.tweetId;
-    // find user in db by id
-    User.findById(userId, (err, foundUser) => {
-      // find tweet embedded in user
-      const foundTweet = foundUser.tweets.id(tweetId);//Go into foundUser's array of tweets and find the tweet with the id of tweetID
-      // update tweet text and completed with data from request body
-      res.render('tweets/edit.ejs', { foundUser, foundTweet });
-    });
-  });
-  
-  // UPDATE TWEET EMBEDDED IN A USER DOCUMENT
-  router.put('/:userId/tweets/:tweetId', (req, res) => { //endpoint in the form
-    console.log('PUT ROUTE');
-    // set the value of the user and tweet ids
-    const userId = req.params.userId;
-    const tweetId = req.params.tweetId;
-  
-    // find user in db by id
-    User.findById(userId, (err, foundUser) => {
-      // find tweet embedded in user
-      const foundTweet = foundUser.tweets.id(tweetId); //Go into foundUser's array of tweets and find the tweet with the id of tweetID
-      // update tweet text and completed with data from request body
-      foundTweet.tweetText = req.body.tweetText;
-      foundUser.save((err, savedUser) => {
-        res.redirect(`/users/${foundUser.id}`); //redirects to the show page for the user
-      });
-    });
-  });
-  
-  router.delete('/:userId/tweets/:tweetId', (req, res) => {
-    console.log('DELETE TWEET');
-    // set the value of the user and tweet ids
-    const userId = req.params.userId;
-    const tweetId = req.params.tweetId;
-  
-    // find user in db by id
-    User.findById(userId, (err, foundUser) => {
-      // find tweet embedded in user
-      foundUser.tweets.id(tweetId).remove(); //Specific for embedded documents when using Mongoose and Mongo
-      // update tweet text and completed with data from request body
-      foundUser.save((err, savedUser) => {
-        res.redirect(`/users/${foundUser.id}`);
-      });
-    });
-  });
+router.get("/:userId/tweets/:tweetId/edit", (req, res) => {
+	// set the value of the user and tweet ids
+	const userId = req.params.userId;
+	const tweetId = req.params.tweetId;
+	// find user in db by id
+	User.findById(userId, (err, foundUser) => {
+		// find tweet embedded in user
+		const foundTweet = foundUser.tweets.id(tweetId); //Go into foundUser's array of tweets and find the tweet with the id of tweetID
+		// update tweet text and completed with data from request body
+		res.render("tweets/edit.ejs", { foundUser, foundTweet });
+	});
+});
+
+// UPDATE TWEET EMBEDDED IN A USER DOCUMENT
+router.put("/:userId/tweets/:tweetId", (req, res) => {
+	//endpoint in the form
+	console.log("PUT ROUTE");
+	// set the value of the user and tweet ids
+	const userId = req.params.userId;
+	const tweetId = req.params.tweetId;
+
+	// find user in db by id
+	User.findById(userId, (err, foundUser) => {
+		// find tweet embedded in user
+		const foundTweet = foundUser.tweets.id(tweetId); //Go into foundUser's array of tweets and find the tweet with the id of tweetID
+		// update tweet text and completed with data from request body
+		foundTweet.tweetText = req.body.tweetText;
+		foundUser.save((err, savedUser) => {
+			res.redirect(`/users/${foundUser.id}`); //redirects to the show page for the user
+		});
+	});
+});
+
+router.delete("/:userId/tweets/:tweetId", (req, res) => {
+	console.log("DELETE TWEET");
+	// set the value of the user and tweet ids
+	const userId = req.params.userId;
+	const tweetId = req.params.tweetId;
+
+	// find user in db by id
+	User.findById(userId, (err, foundUser) => {
+		// find tweet embedded in user
+		foundUser.tweets.id(tweetId).remove(); //Specific for embedded documents when using Mongoose and Mongo
+		// update tweet text and completed with data from request body
+		foundUser.save((err, savedUser) => {
+			res.redirect(`/users/${foundUser.id}`);
+		});
+	});
+});
 
 module.exports = router; //Exports so that it can be used in other parts of the site

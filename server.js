@@ -25,9 +25,9 @@ app.use(methodOverride('_method')); //
 app.use('/users', require('./controllers/usersController')); //Puts /users before every route in the controller file
 
 
-app.get('/', (req, res) => {
-  res.render('home.ejs'); //Basically the home page
-});
+// app.get('/', (req, res) => {
+//   res.render('home.ejs'); //Basically the home page
+// });
 
 app.listen(PORT, () => {
   console.log(`server is running on port ${PORT}`);
