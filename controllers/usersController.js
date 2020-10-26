@@ -2,6 +2,10 @@ const router = require("express").Router(); //Router comes with Express.  Enable
 const User = require("../models/user").User;
 const Tweet = require("../models/user").Tweet; //Use . notation to refer to specific schema (object)
 
+const dayjs = require("dayjs");
+const now = dayjs();
+console.log(now);
+
 // const {User, Tweet } = require('..models/user'); //Another way of re-writing the declaratinos for User and Tweet
 
 //INDEX
@@ -23,7 +27,8 @@ router.get("/new", (req, res) => {
 router.get("/:userId", (req, res) => {
 	// find user in db by id and add new tweet
 	User.findById(req.params.userId, (error, user) => {
-		res.render("users/show.ejs", { user });
+		lastUpdated = dayjs(user.updatedAt).format("MM-DD-YYYY HH:mm:ss"); //Takes in the time the tweet was modified and converts it to string to be used in detail page.
+		res.render("users/show.ejs", { user, lastUpdated });
 	});
 });
 
@@ -109,8 +114,7 @@ router.delete("/:userId/", (req, res) => {
 		// find tweet embedded in user
 		foundUser.remove(); //Specific for embedded documents when using Mongoose and Mongo
 		res.redirect(`/users/`);
-		});
 	});
-
+});
 
 module.exports = router; //Exports so that it can be used in other parts of the site

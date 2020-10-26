@@ -14,8 +14,7 @@
   <% user.tweets.forEach(tweet => { %>
   <li>
     <a href="/users/<%= user.id %>/tweets/<%= tweet.id %>/edit"
-      ><%= tweet.tweetText %></a
-    >
+      ><%= tweet.tweetText %></a> Last Updated: <%=lastUpdated%>
     <form
       action="/users/<%= user.id %>/tweets/<%= tweet.id %>?_method=DELETE"
       method="POST"
