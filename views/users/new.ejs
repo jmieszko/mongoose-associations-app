@@ -1,0 +1,9 @@
+<h1>Create a New User</h1>
+
+<form action="/users" method="POST">
+  <div class="form-group">
+    <label for="name">Name</label> <!--For attribute needs to match the id attribute of the input.  Useful for radio button-->
+    <input type="text" class="form-control" id="name" name="name" /> <!--Name matches up with name in the user.js schema -->
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
